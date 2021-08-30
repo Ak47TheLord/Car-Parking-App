@@ -34,7 +34,7 @@ def homeView(request):
     return render(request, 'account/include/home.html', context)
 
 
-@unauthenticated_user
+@allowed_user(allowed_roles=['admin'])
 @csrf_exempt
 def parkView(request):
     all_slot = Slot.objects.all()
@@ -96,7 +96,7 @@ def slots(request):
     return render(request, 'account/include/unpark.html', context)
 
 
-@unauthenticated_user
+@allowed_user(allowed_roles=['admin'])
 def unpark_slot(request, slot_id):
     slot = Slot.objects.get(pk=slot_id)
     slot.car_id = None
