@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,7 +8,6 @@ from .decorators import unauthenticated_user, allowed_user
 
 
 # Create your views here.
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -34,6 +33,43 @@ def homeView(request):
     return render(request, 'account/include/home.html', context)
 
 
+def add_slot(request):
+    if request.method == "POST":
+        form = ParkForm(request.POST)
+        if form.is_valid():
+            slot = form.save()
+            return redirect('slots')
+    else:
+        form = ParkForm()
+
+        context = {
+            'form': form
+        }
+    return render(request, 'account/include/add_update.html', context)
+
+
+def edit_slot(request, pk):
+    slot = Slot.objects.get(pk=pk)
+    if request.method == "POST":
+        form = ParkForm(request.POST, instance=slot)
+        if form.is_valid():
+            slot = form.save()
+            return redirect('slots')
+    else:
+        form = ParkForm(instance=slot)
+
+        context = {
+            'form': form
+        }
+    return render(request, 'account/include/add_update.html', context)
+
+
+def delete_slot(request, pk):
+    slot = get_object_or_404(Slot, pk=pk)
+    slot.delete()
+    return redirect("slots")
+
+
 @allowed_user(allowed_roles=['admin'])
 @csrf_exempt
 def parkView(request):
@@ -45,9 +81,6 @@ def parkView(request):
             car_no = park_form.cleaned_data.get("car_id")
             slot = all_slot.filter(vacant=True).first()
             if slot:
-                print(slot.vacant)
-
-                print(car_no)
                 slot.car_id = car_no
                 slot.vacant = False
                 slot.save()

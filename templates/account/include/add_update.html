@@ -3,14 +3,6 @@
 {% load widget_tweaks %}
 
 {% block title %}Parking Places{% endblock %}
-
-{% block main_heading %}
-    Park Your Vehicle Here...
-{% endblock %}
-{% block header_content %}
-    <p>find one of the best parking place that suits you need!</p>
-{% endblock %}
-
 {% block body %}
     <section class="d-flex justify-content-center align-items-center flex-column">
         <h2>Park here</h2>
@@ -23,10 +15,10 @@
         </nav>
         <form method="POST">
             {% csrf_token %}
-            {% for field in park_form %}
+            {% for field in form %}
                 <div class="form-group">
                     <label>{{ field.label }}</label>
-                    {% render_field field class="car_id_change form-control" %}
+                    {{ field }}
                     <small style="color: red">
                         {{ field.errors }}
                     </small>
@@ -35,7 +27,6 @@
             <button class="btn btn-success">Park</button>
             <button class="reset btn btn-danger">Reset</button>
         </form>
-
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-2 " role="alert">
                 <strong>Message: </strong> {{ message }}
@@ -44,12 +35,13 @@
                 </button>
             </div>
         {% endfor %}
+
     </section>
     <script>
         document.querySelector('.reset').addEventListener('click', function (e) {
             e.preventDefault();
 
-            document.querySelector(".car_id_change").value = "";
+            {#document.querySelector(".car_id_change").value = "";#}
         })
     </script>
 {% endblock %}

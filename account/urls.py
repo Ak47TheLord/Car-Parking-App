@@ -10,9 +10,11 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='account/include/logout.html'), name='logout'),
     # path('park/', park, name='parkin')
     path('home', homeView, name='homeView'),
+    path('addslot', add_slot, name='add-slot'),
+    path('editslot/<int:pk>', edit_slot, name='update-slot'),
+    path('deleteslot/<int:pk>', delete_slot, name='delete-slot'),
     path('slots/', slots, name='slots'),
     path('slots/<int:slot_id>/unpark', unpark_slot, name='un-park-slot'),
     # path('<slug:meetup_slug>', information, name='information-detail'),
 
 ]
-

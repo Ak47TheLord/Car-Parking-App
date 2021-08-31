@@ -15,4 +15,4 @@ class UserRegisterForm(UserCreationForm):
 class ParkForm(forms.ModelForm):
     class Meta:
         model = Slot
-        fields = ['car_id', ]
+        fields = "__all__"
